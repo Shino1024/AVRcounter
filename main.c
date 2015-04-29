@@ -28,10 +28,34 @@ MICROCONTROLLER.
 **************************************/
 #include <avr/io.h>
 #include <util/delay.h>
+
+int convert(int from);
+
 int main(void) {
 	char* digits = {0b00111111, 0b00000110, 0b01011011, 0b01001111, 0b01100110, 0b01101101, 0b01111101, 0b00000111, 0b01111111, 0b01101111};
 	PORTA = 0xFF;
 	DDRA = 0xFF;
 	
 	return 0;
+}
+
+char* convert(int from, char* digits) {
+	int digits, help, i = 0;
+	if (from < 10)
+		digits = 1;
+	else if (from > 9 && from < 100)
+		digits = 2;
+	else if (from > 99 && from < 1000)
+		digits = 3;
+	else
+		digits = 4;
+	char tab[digits + 1];
+	while (digits > 0) {
+		help = from - (from / 10) * 10;
+		tab[i] = digits[help];
+		++i;
+		--digits;
+	}
+	tab[i] = NULL;
+	return tab;
 }
